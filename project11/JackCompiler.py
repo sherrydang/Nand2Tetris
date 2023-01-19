@@ -14,15 +14,15 @@ else:
     if file.endswith('.jack'):
         tokenizer = JackTokenizer.JackTokenizer()
         tokenizer.tokenize(file)
-        # output to .xml
+        # output to .vm
         path_name, ext = os.path.splitext(file)
-        outfile_name = path_name + '.xml'
+        outfile_name = path_name + '.vm'
         engine = CompilationEngine.CompilationEngine(tokenizer, outfile_name)
         engine.compile_class()
     # handle folder
     else:
         # Get a list of all the .jack files in the folder
-        jack_files = glob.glob('**/*.jack', recursive=True)
+        jack_files = glob.glob(file + '**/*.jack', recursive=True)
 
         # Iterate over the list of .jack files
         for file in jack_files:
@@ -30,6 +30,6 @@ else:
             tokenizer.tokenize(file)
             # output to .xml
             path_name, ext = os.path.splitext(file)
-            outfile_name = path_name + '.xml'
+            outfile_name = path_name + '.vm'
             engine = CompilationEngine.CompilationEngine(tokenizer, outfile_name)
             engine.compile_class()
