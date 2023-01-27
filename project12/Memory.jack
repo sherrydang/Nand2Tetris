@@ -1,0 +1,86 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Memory.jack
+
+/**
+ * This library provides two services: direct access to the computer's main
+ * memory (RAM), and allocation and recycling of memory blocks. The Hack RAM
+ * consists of 32,768 words, each holding a 16-bit binary number.
+ */ 
+class Memory {
+    static Array ram;
+    static Array heap;
+    static Array freeList;
+
+    /** Initializes the class. */
+    function void init() {
+        let ram = 0;
+        let heap = 2048; // heapBase
+        let freeList = heap;
+        let heap[0] = 0; // next
+        let heap[1] = 14334; // length exclude overhead
+        return;
+    }
+
+    /** Returns the RAM value at the given address. */
+    function int peek(int address) {
+        var int value;
+        let value = ram[address];
+        return value;
+    }
+
+    /** Sets the RAM value at the given address to the given value. */
+    function void poke(int address, int value) {
+        let ram[address] = value;
+        return;
+    }
+
+    /** Finds an available RAM block of the given size and returns
+     *  a reference to its base address. */
+    function int alloc(int size) {
+        var int head, available_size, tail, block;
+        let head = freeList;
+        while (true) {
+            let available_size = head[1];
+            if (~(available_size < (size + 2))) {
+                let tail = head + available_size + 2;
+                let block = tail - size; // block data address
+                let block[-1] = size;
+                let block[-2] = 0;
+                let available_size = available_size - block[-1] - 2;
+                let head[1] = available_size; // set back new size in freeList
+                return block;
+            }
+            // end of freeList
+            if (head[0] = 0) {
+                return 0;
+            }
+            // traverse to next node
+            else {
+                let head = head[0];
+            }
+        }
+        return 0;
+    }
+
+    /** De-allocates the given object (cast as an array) by making
+     *  it available for future allocations. */
+    function void deAlloc(Array o) {
+        var int head, segment;
+        let segment = o - 2;
+        let head = freeList;
+        // insert segement into the freeList
+        while (true) {
+            // append at the end of freeList
+            if (head[0] = 0) {
+                let head[0] = segment;
+                return;
+            }
+            else {
+                let head = head[0];
+            }
+        }
+        return;
+    }    
+}
