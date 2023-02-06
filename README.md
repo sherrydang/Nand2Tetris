@@ -7,6 +7,7 @@ This repository contains the projects I wrote for Nand2Tetris Part 2 course on C
 - Project 08: VM II: Program Control
 - Project 10: Compiler I: Syntax Analysis
 - Project 11: Compiler II: Code Generation
+- Project 12: Operating System
 
 ## How to use
 Each project has its own directory containing the source code and necessary files. To run the code, you will need to have the Nand2Tetris software suite installed on your computer.
