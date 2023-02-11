@@ -1,0 +1,113 @@
+class Snake {
+
+    field int x, y; // position of the snake's head
+    field int length;
+    field int direction;
+    field Array segments;
+
+    constructor Snake new() {
+        var int i, j;
+        let x = 215; // start from middle
+        let y = 115;
+        let length = 30;
+        let direction = 1; // default: going up
+        let segments = Array.new(100);
+        let i = 0;
+        let j = 0;
+        while (i < length) {
+            let segments[i] = x;
+            let segments[i + 1] = y + (5 * j);
+            let i = i + 2;
+            let j = j + 1;
+        } // draw the original snake
+        return this;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Draws the snake. */
+    method void draw() {
+        var int i;
+        var int temp_x, temp_y;
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x, y, x + 4, y + 4);
+        // remove tail exceeded length
+        let temp_x = segments[length - 2];
+        let temp_y = segments[length - 1];
+        do Screen.setColor(false);
+        do Screen.drawRectangle(temp_x, temp_y, temp_x + 4, temp_y + 4);
+	    return;
+    }
+
+    method int getDirection() {
+        return direction;
+    }
+
+    /**
+     * Sets the direction of the snake
+     * @param dir the new direction of the snake (1: up, 2: down, 3: left, 4: right)
+     */
+    method void setDirection(int in_direction) {
+        let direction = in_direction;
+        return;
+    }
+
+    method int getLength() {
+        return length;
+    }
+
+
+    method int getX() {
+        return x;
+    }
+
+    method int getY() {
+        return y;
+    }
+
+    method int getSegments() {
+        return segments;
+    }
+
+    /** updates the head position based on the direction and adds the new position to the body. 
+     * If length exceeds the current body size, remove the oldest position from the body. */
+    method void move() {
+        var int i;
+
+        let i = length - 1;
+        while (i > 0) {
+            let segments[i] = segments[i-2];
+            let segments[i-1] = segments[i-3];
+            let i = i - 2;
+        }
+
+        if (direction = 1) {
+            let y = y - 5;
+        }
+        if (direction = 2) {
+            let y = y + 5;
+        }
+        if (direction = 3) {
+            let x = x - 5;
+        }
+        if (direction = 4) {
+            let x = x + 5;
+        }
+
+        let segments[0] = x;
+        let segments[1] = y;
+
+        return;
+    }
+
+    /** increases the length by one. */
+    method void grow() {
+        let length = length + 2;
+        return;
+    }
+
+
+}

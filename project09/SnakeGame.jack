@@ -1,0 +1,190 @@
+/** 
+ * Author: Zehui
+ * divide the screen into 5 * 5 cells, move the snake in between the cells
+ * generate the food in the cells.
+ */
+class SnakeGame {
+
+    field Snake snake;
+    field Food food;
+    field int score;
+
+    constructor SnakeGame new() {
+        let snake = Snake.new();
+        let food = Food.new();
+        do showScore();
+        return this;
+    }
+    
+    method void dispose() {
+        do snake.dispose();
+        return;
+    }
+
+    method boolean eatFood() {
+        var boolean collide;
+        let collide = false;
+
+        if ((snake.getX() = food.getX()) & (snake.getY() = food.getY())) {
+            let collide = true;
+        }
+        return collide;
+    }
+
+
+    /** checks if the head position collides with the body or with the borders of the game screen. */
+    method boolean checkCollision() {
+        var boolean collide;
+        var int i;
+        var int body_x, body_y;
+        var int head_x, head_y;
+        var Array segments;
+        let segments = snake.getSegments();
+        let head_x = snake.getX();
+        let head_y = snake.getY();
+
+        // wall collision
+        if (head_x < 0) {
+            let collide = true;
+        }
+        if (head_x > 507) {
+            let collide = true;
+        }
+        if (head_y < 0) {
+            let collide = true;
+        }
+        if (head_y > 251){
+            let collide = true;
+        }
+        /** self collision: head position overlap with body position */
+
+        let i = 2; // body start from segment[2] till segment[length-1]
+        
+        while ( i < snake.getLength()) {
+            let body_x = segments[i];
+            let body_y = segments[i+1];
+            if ((body_x = head_x) & (body_y = head_y)) {
+                let collide = true;
+                return collide;
+            }
+            let i = i + 2;
+        }
+
+        return collide;
+    }
+
+    method void showScore() {
+        do Output.moveCursor(22, 1);
+        do Output.printString("Your score is: ");
+        do Output.printInt(score);
+        return;
+    }
+
+    method boolean collideFood(int food_x, int food_y) {
+        var boolean collide;
+        var int i, snake_x, snake_y;
+        var Array segments;
+        let segments = snake.getSegments();
+        let collide = false;
+        while ( i < snake.getLength()) {
+            let snake_x = segments[i];
+            let snake_y = segments[i+1];
+            if ((snake_x = food_x) & (snake_y = food_x)) {
+                let collide = true;
+                return collide;
+            }
+            let i = i + 2;
+        }
+
+        return collide;
+    }
+
+    /** Runs the game: handles the user's inputs and moves the snake accordingly */
+    method void run() {
+        var char key;  // the key currently pressed by the user
+        var boolean exit;
+        var int seed;
+        var int food_x, food_y;
+        var int snake_x, snake_y;
+        var int i;
+        let exit = false;
+        let seed = 0;
+        let i = 0;
+      
+        while (~exit) {
+
+            let key = Keyboard.keyPressed();
+
+            if (key) {
+                if (seed < 100) {
+                    let seed = seed + 1; // seed used to generate random positon of food
+                }
+                else {
+                    let seed = 0;
+                }
+            }
+
+            // up arrow
+            if (key = 131) {
+                if (~(snake.getDirection() = 2)) {
+                    do snake.setDirection(1); // set up
+                }
+            }
+            // down arrow
+            if (key = 133) { 
+                if (~(snake.getDirection() = 1)) {
+                    do snake.setDirection(2); // set down
+                }
+            }
+            // left arrow
+            if (key = 130) { 
+                if (~(snake.getDirection() = 4)) {
+                    do snake.setDirection(3); // set left
+                }
+            }
+            // right arrow
+            if (key = 132) { 
+                if (~(snake.getDirection() = 3)) {
+                    do snake.setDirection(4); // set right
+                }
+            }
+
+            if (key = 81)  { 
+                do Output.moveCursor(10,27);
+                do Output.printString("Game Over");
+                let exit = true; 
+            }     // q key
+
+            do snake.move(); // move the snake 1 cell away
+
+            if (eatFood() = true) {
+                do snake.grow();
+                let score = score + 1;
+                do showScore();
+
+
+                let food_x = food.setX(seed);
+                let food_y = food.setY(seed);
+                /* if food on snake body, regenerate the position */
+                while(collideFood(food_x, food_y) = true) {
+                    let food_x = food.setX(seed);
+                    let food_y = food.setY(seed);
+                }
+                
+                do food.show();
+            }
+
+            if (checkCollision() = true) {
+                do Output.moveCursor(10,27);
+                do Output.printString("Game Over");
+                let exit = true;
+            } else {
+                do snake.draw();
+                do Sys.wait(100);
+            }
+
+        } // while
+        return;
+   }
+
+}

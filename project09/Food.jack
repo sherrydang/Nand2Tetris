@@ -1,0 +1,75 @@
+class Food {
+
+    field int x; // the food's screen location (in pixels)
+    field int y;
+    field Random random;
+
+    /**
+     * Generates a random position for the food
+     */
+    constructor Food new() {
+        let random = Random.new();
+        do setX(10); // init seed set to 10
+        do setY(10);
+        do show();
+        return this;
+    }
+
+    /**
+     * Draws the food on the screen
+     * xmax 511
+     * ymax 255
+     */
+    method void draw() {
+        do Screen.drawRectangle(x, y, x+4, y+4);
+        return;
+    }
+
+    method int getX() {
+        return x;
+    }
+
+    method int getY() {
+        return y;
+    }
+
+    method int setX(int seed) {
+        // random pos of food
+        do random.seed(seed);
+        let x = random.random(102)*5; // grid by 5x5
+        return x;
+    }
+
+    method int setY(int seed) {
+        // random pos of food
+        do random.seed(seed);
+        let y = random.random(48)*5;
+        return y;
+    }
+
+    /** Shows the food. */
+    method void show() {
+        do Screen.setColor(true);
+        do draw();
+        return;
+    }
+
+    /** Hides the food. */
+    method void hide() {
+        do Screen.setColor(false);
+        do draw();
+        return;
+    }
+
+    /** Set the food position. */
+    method void setPosition(int x_pos, int y_pos) {
+        let x = x_pos;
+        let y = y_pos;
+        return;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+}
