@@ -5,6 +5,7 @@ This repository contains the projects I wrote for Nand2Tetris Part 2 course on C
 ## Projects
 - Project 07: VM I: Stack Arithmetic
 - Project 08: VM II: Program Control
+- Project 09: High-Level Language
 - Project 10: Compiler I: Syntax Analysis
 - Project 11: Compiler II: Code Generation
 - Project 12: Operating System
@@ -21,6 +22,7 @@ For more information on the Nand2Tetris course and the projects, please visit th
 ## 项目
 - 项目 07：VM I：堆栈算法
 - 项目 08：VM II：程序控制
+- 项目 09：高级语言
 - 项目 10：编译器 I：语法分析
 - 项目 11：编译器 II：代码生成
 - 项目 12：操作系统
