@@ -1,0 +1,39 @@
+/** Linear congruential generator
+ * The formula used by an LCG is typically of the form:
+ * X_n = (a * X_{n-1} + c) % m
+ */
+class Random {
+
+	static int a;
+	static int c;
+	static int m;
+	field int seed;
+
+	constructor Random new() {
+		let a = 25173; // coprime to m
+		let c = 13849; // non-zero
+		let m = 32767; // large prime number
+		return this;
+	}
+
+	method void seed(int in_seed) {
+		let seed = in_seed;
+		return;
+	}
+
+	/**
+     * Generates a random number within the specified range
+     * @param rangeMax The maximum value of the range
+     * @return A random number between 0 and rangeMax-1
+     */
+	method int random(int rangeMax) {
+		var int rand;
+	    let seed = mod((a * seed + c), m);
+	    let rand = Math.abs(mod(seed, rangeMax));
+        return rand;
+	}
+
+	method int mod(int x, int y) {
+		return x - ((x / y) * y);
+	}
+}
